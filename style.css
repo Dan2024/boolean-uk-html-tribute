@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Bangers&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bangers&family=Staatliches&display=swap");
 
 * {
   margin: 0;
@@ -6,36 +6,168 @@
   box-sizing: border-box;
 }
 
-img {
-  width: 200px;
+img,
+picture {
+  max-width: 100%;
+  display: block;
+  /* this reset nakes images easier to
+  work with */
 }
 
 body {
   background-color: rgba(7, 151, 211, 255);
 }
 
-h2 {
+h1 {
   font-family: bangers;
+  color: rgba(7, 151, 211, 255);
+  text-shadow: 2px 2px #060547;
+  font-size: 5rem;
+}
+
+h2 {
+  font-family: Staatliches;
   color: white;
   font-size: 3rem;
   text-shadow: 2px 2px #060547;
 }
 
-h1 {
-  padding-top: 40px;
-  font-family: bangers;
-  color: rgba(7, 151, 211, 255);
-  text-shadow: 2px 2px #060547;
-  font-size: 5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+p {
+  font-family: staatliches;
+  font-size: 2rem;
+}
+
+a {
+  text-decoration: none;
+  font-size: 1.5rem;
+  color: white;
 }
 
 header {
   background-image: radial-gradient(
-    rgba(254, 226, 103, 255),
-    rgba(232, 167, 65, 255)
+    rgba(254, 226, 103, 255) 30%,
+    rgba(196, 127, 8, 255) 70%
   );
   height: 200px;
+
+  display: grid;
+  place-items: center;
+
+  /* radial gradient is circular - mess around with percentages
+  to see how it works -
+  display grid place items center semi-easy way to center this
+  tags child element(s)in this case the h1   */
+}
+
+.title {
+  padding: 40px;
+}
+
+.container {
+  max-width: 100rem;
+  margin-inline: auto;
+  padding-inline: 2rem;
+  /* inline bit adds margin/padding left and right - auto means 
+  the margin will be generated automatically and be equal on both
+  sides*/
+}
+
+.product-grid {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  /* this is the main grid that all the child ("card stacked") elements are a part of
+
+   the template columns part is very important - the auto-fit allows less
+   use of media queries if used correctly - it fits the columns youve defined 
+   into the availible space - (autofill will keep adding in new columns even if they are empty)
+   you should use minmax with these commands 
+   
+   basically each card has a minimum width of 15rem but if there is space for 
+   another, the other card will create another column etc. the 1fr means that 
+   the columns/cards can grow as the screen gets larger proportionaly until
+   the max width of the .container of this grid is reached - if no max width 
+   set the columns will fill the entirety of the screen no matter how big it is*/
+}
+
+.stacked {
+  display: grid;
+  /* all the cards have a class of .stacked on them. we're nesting
+  a grid inside the product grid. this is so we can then target the stacked
+  child elements as shown below */
+}
+
+.stacked > * {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  /* the star means target all the direct child elements of (in this case)
+  .stacked (so the image and card content (contatining card title and card info)).
+  the grid and row makes it so that the text and the image are occupying 
+  the same column with the text on top of the image */
+}
+
+.card {
+  aspect-ratio: 1 / 1.5;
+  /* this means the actual card containing both the image and the card info is
+  1.5x longer in height than width - this is why we can use the align-self end
+  on the card content below to shift the card content just below the image */
+}
+
+.card__content {
+  background: white;
+  align-self: end;
+  margin: 0.5rem 0.5rem 2rem;
+  padding: 0.5rem;
+  box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 0.1);
+  /* align self end shifts card content to bottom of card - the margin gives
+  the look as though the card content is a smaller box just overlapping image -
+  if you comment out margin youll see it takes up full card and doesnt overlap
+  on image*/
+}
+
+.card__title {
+  font-size: 2rem;
+  line-height: 1.1;
+  color: rgba(230, 184, 0, 255);
+  text-shadow: rgba(196, 127, 8, 255);
+}
+
+.card__info {
+  font-size: 1rem;
+}
+
+.card__img {
+  width: 100%;
+  aspect-ratio: 1 / 1.25;
+  object-fit: cover;
+  /* cover here means the image will cover all the space provided and 
+  it will do it so as not to stretch the image in anyway, meaning it
+  appears more zoomed in in some cases - can change zoomed in area with
+  background-position: top-left for example*/
+}
+
+@media (min-width: 60em) {
+  .card__img {
+    aspect-ratio: 1 / 1;
+    /* this means the width and height are exactly the same length */
+  }
+
+  .card.featured {
+    grid-row: span 2;
+    grid-column: span 2;
+    /* this means the featured card is taking up 2 rows and 2 columns
+    (when at the minimum width of 60em in this case) - lower than 60em
+    means the default styling of it only occupying a single row and col
+    is applied which is what you want in this case for smaller screens*/
+  }
+
+  .card.featured .card__img {
+    aspect-ratio: 1 / 1.25;
+    /* this means the image part of the featured card is slightly longer heightwise
+    than widthwise - change to 1/1 to see difference */
+  }
+
+  .card.featured .card__title {
+    font-size: 3rem;
+  }
 }
